@@ -4,9 +4,37 @@ This is an implementation of the [Hawk HTTP authentication scheme](https://githu
 
 Forked from [alexbilbie/PHP-Hawk](https://github.com/alexbilbie/PHP-Hawk).
 
-This fork fixes an issue which made original package unusable.
+## Fork
+This fork fixes an issue which made original package unusable and also adds Nonce value.
+
+Package doesn't use official MAC normalization format so both Client and Server should use this package.
 
 ## Install
+
+### Composer
+
+
+Since this is a fork, you can't get it directly from packagist.org, you have to add this to your composer.json:
+
+```json
+"repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/InToSSH/PHP-Hawk"
+        }
+    ],
+```
+
+Then include `alexbilbie/hawk`:
+```json
+{
+	"require": {
+		"alexbilbie/hawk": "dev-master"
+	}
+}
+```
+
+Then run `composer update`.
 
 ### Git
 
@@ -61,3 +89,10 @@ $valid = Hawk::verifyHeader($hawk, array(
 		'method'	=>	'GET'
 	), $secret); // return true if the request is valid, otherwise false
 ```
+
+## Replay protection
+This package doesn't include replay protection because it is your decision where you want to save the nonce and timestamp values to check the uniqueness of the Hawk header. Although you can get both nonce and timestamp easily using
+
+`$hawk_parts = Hawk::parseHeader($hawk);`
+
+Refer to the official [Hawk documentation](https://github.com/hueniverse/hawk#replay-protection) to learn more.
