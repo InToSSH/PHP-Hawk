@@ -77,7 +77,6 @@ class Hawk {
 		$params['method'] = $method;
 		$params['ext'] = (count($appData) > 0) ? http_build_query($appData) : null;
 		$params['timestamp'] = (isset($params['timestamp'])) ? $params['timestamp'] : time();
-		die(var_dump($params));
 
 		// Generate the MAC address
 		$mac = self::generateMac($secret, $params);

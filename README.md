@@ -1,6 +1,7 @@
 # PHP Hawk Authentication
 
 This is an implementation of the [Hawk HTTP authentication scheme](https://github.com/hueniverse/hawk/).
+
 Forked from [alexbilbie/PHP-Hawk](https://github.com/alexbilbie/PHP-Hawk).
 
 ## Install
