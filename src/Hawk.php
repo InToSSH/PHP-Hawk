@@ -19,6 +19,7 @@ class Hawk {
 	{
 		$default = array(
 			'timestamp'	=>	time(),
+			'nonce' => '',
 			'method'	=>	'GET',
 			'path'	=>	'',
 			'host'	=>	'',
@@ -77,12 +78,14 @@ class Hawk {
 		$params['method'] = $method;
 		$params['ext'] = (count($appData) > 0) ? http_build_query($appData) : null;
 		$params['timestamp'] = (isset($params['timestamp'])) ? $params['timestamp'] : time();
+		$params['nonce'] = substr(md5(rand()), 0, 6);
+
 
 		// Generate the MAC address
 		$mac = self::generateMac($secret, $params);
 
 		// Make the header string
-		$header = 'Hawk id="'.$key.'", ts="'.$params['timestamp'].'", ';
+		$header = 'Hawk id="'.$key.'", ts="'.$params['timestamp'].'", nonce="'.$params['nonce'].'", ';
 		$header .= (isset($params['ext'])) ? 'ext="'.$params['ext'].'", ' : '';
 		$header .= 'mac="'.$mac.'"';
 
@@ -100,8 +103,9 @@ class Hawk {
 
 		$parts['id'] = substr($segments[0], 4, strlen($segments[0])-5);
 		$parts['timestamp'] = substr($segments[1], 4, strlen($segments[1])-5);
-		$parts['mac'] = (count($segments) === 4) ? substr($segments[3], 5, strlen($segments[3])) : substr($segments[2], 5, strlen($segments[2]));
-		$parts['ext'] = (count($segments) === 4) ? substr($segments[2], 5, strlen($segments[2])-6) : null;
+		$parts['nonce'] = substr($segments[2], 7, strlen($segments[2])-8);
+		$parts['mac'] = (count($segments) === 5) ? substr($segments[4], 5, strlen($segments[4])) : substr($segments[3], 5, strlen($segments[3]));
+		$parts['ext'] = (count($segments) === 5) ? substr($segments[3], 5, strlen($segments[3])-6) : null;
 
 		if ($parts['ext'] === null)
 		{
@@ -124,10 +128,11 @@ class Hawk {
 		$parts =  self::parseHeader($hawk);
 
 		$params['timestamp'] = $parts['timestamp'];
-
+		$params['nonce'] = $parts['nonce'];
 		if (isset($parts['ext'])) {
 			$params['ext'] = $parts['ext'];
 		}
+
 
 		// Generate the MAC
 		$test = self::generateMac($secret, $params);
