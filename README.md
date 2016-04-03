@@ -4,25 +4,13 @@ This is an implementation of the [Hawk HTTP authentication scheme](https://githu
 
 Forked from [alexbilbie/PHP-Hawk](https://github.com/alexbilbie/PHP-Hawk).
 
+This fork fixes an issue which made original package unusable.
+
 ## Install
-
-### Composer
-
-Include `alexbilbie/hawk` in your composer.json:
-
-```json
-{
-	"require": {
-		"alexbilbie/hawk": "*"
-	}
-}
-```
-
-Then run `composer update`.
 
 ### Git
 
-Run `git clone git://github.com/alexbilbie/PHP-Hawk.git /path/to/php-hawk`
+Run `git clone git://github.com/InToSSH/PHP-Hawk.git /path/to/php-hawk`
 
 ## Client Usage
 
